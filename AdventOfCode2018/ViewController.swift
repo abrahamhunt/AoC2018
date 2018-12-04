@@ -9,12 +9,22 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        let dayOfAdvent = Calendar.current.dateComponents([.day], from: Date(timeIntervalSinceNow: 3600 * 2)).day!
+        let range = dayOfAdvent ..< dayOfAdvent + 1
+        // For all answers
+        // let range = 1 ..< 26
+        for i in range {
+            let classString = NSStringFromClass(Day.self) + String(i)
+            guard let newType = NSClassFromString(classString) as? Day.Type else {
+                print("No type available for Day \(i)")
+                continue
+            }
+            print(newType.init())
+        }
     }
-
 
 }
 
