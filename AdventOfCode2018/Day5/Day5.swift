@@ -24,12 +24,21 @@ class Day5: Day {
     
     override func solvePartTwo(_ inputs: [String]) -> String {
         for input in inputs {
+            NSLog("Start part two")
             var shortest = input.count
             for letter in String.alphabet {
                 let filteredInput = input.replacingOccurrences(of: letter, with: "", options: .caseInsensitive, range: input.startIndex ..< input.endIndex)
                 shortest = min(filteredInput.removeReactions().count, shortest)
             }
-            return String("shortest: \(shortest)")
+            NSLog("End part two")
+            NSLog("Start part two more optimally")
+            var shortestMoreOptimally = input.count
+            for letter in String.alphabet {
+                let filteredInput = input.replacingOccurrences(of: letter, with: "", options: .caseInsensitive, range: input.startIndex ..< input.endIndex)
+                shortestMoreOptimally = min(filteredInput.removeReactionsMoreOptimally(), shortestMoreOptimally)
+            }
+            NSLog("End part two more optimally: \(shortestMoreOptimally)")
+            return String("shortest: \(shortestMoreOptimally)")
         }
         return ""
     }
@@ -63,6 +72,36 @@ extension String {
             upperIndex = index(after: lowerIndex)
         }
         return reactiveString
+    }
+    
+    func removeReactionsMoreOptimally() -> Int {
+        // return a string with first set of reactions removed
+        var lowerIndex = self.startIndex
+        var upperIndex = index(after: lowerIndex)
+        var indices = [String.Index]()
+        while upperIndex < self.endIndex {
+            let lowerChar = self[lowerIndex]
+            let upperChar = self[upperIndex]
+            if upperChar == lowerChar || (upperChar.unicodeScalars.first!.value - 65) % 32 != (lowerChar.unicodeScalars.first!.value - 65) % 32 {
+                // no reaction
+                indices.append(lowerIndex)
+                lowerIndex = upperIndex
+                upperIndex = index(after: lowerIndex)
+            } else {
+                if indices.last == lowerIndex {
+                    indices.removeLast()
+                }
+                if let lastGoodIndex = indices.popLast() {
+                    lowerIndex = lastGoodIndex
+                    upperIndex = index(after: upperIndex)
+                } else {
+                    lowerIndex = index(after: upperIndex)
+                    upperIndex = index(after: lowerIndex)
+                }
+            }
+        }
+        indices.append(lowerIndex)
+        return indices.count
     }
 
 }
