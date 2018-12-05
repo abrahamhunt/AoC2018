@@ -15,7 +15,7 @@ class ViewController: UIViewController {
         let dayOfAdvent = Calendar.current.dateComponents([.day], from: Date(timeIntervalSinceNow: 3600 * 2)).day!
         let range = dayOfAdvent ..< dayOfAdvent + 1
         // For all answers
-        // let range = 1 ..< 26
+//         let range = 1 ..< 26
         for i in range {
             let classString = NSStringFromClass(Day.self) + String(i)
             guard let newType = NSClassFromString(classString) as? Day.Type else {

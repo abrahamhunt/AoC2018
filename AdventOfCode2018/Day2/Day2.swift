@@ -72,13 +72,10 @@ extension String {
     func sameCharacters(_ string: String) -> String {
         var diffCount = 0
         var result = ""
-        for (i, j) in zip(self, string) {
+        for (i, j) in zip(self, string) where diffCount < 2 {
             if i != j { diffCount += 1} else { result.append(i) }
-            if diffCount > 1 {
-                return ""
-            }
         }
-        return result
+        return diffCount < 2 ? result : ""
     }
     
 }
